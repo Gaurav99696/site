@@ -74,8 +74,9 @@
       #panelsWrapper {
         margin: 80px auto;
         display: flex;
-        justify-content: right;
         gap: 20px;
+        justify-content: center;
+        align-items: center;
       }
       #mainForm {
         width: 100%;
@@ -91,72 +92,275 @@
       <button onclick="checkPassword()">Unlock</button>
     </div>
 
+    <nav class="hidden" id="about">
+      <div style="display: flex">
+        <button
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 140px;
+            height: 40px;
+            background-color: #343a40;
+            border-radius: 5px;
+            color: rgb(255, 255, 255);
+            margin: 20px 0px 0px 20px;
+          "
+          onclick="showAbout()"
+        >
+          About Model
+        </button>
+        <button
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 180px;
+            height: 40px;
+            background-color: #dcdcdc;
+            border-radius: 5px;
+            color: rgb(0, 0, 0);
+            margin: 20px 0px 0px 20px;
+          "
+          onclick="showPerformance()"
+        >
+          Model Performance
+        </button>
+        <button
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 180px;
+            height: 40px;
+            border-radius: 5px;
+            color: rgb(0, 0, 0);
+            margin: 20px 0px 0px 20px;
+            background-color: transparent;
+          "
+          onclick="showSupport()"
+        >
+          Support & QNA
+        </button>
+      </div>
+    </nav>
+
     <!-- Panels Wrapper (hidden initially) -->
     <div id="panelsWrapper" class="hidden" style="padding: 0px 50px">
-      <!-- Prediction Input Panel -->
       <div
         class="container hidden"
-        id="mainForm"
-        style="margin: 50px 0px; height: 360px"
+        id="instructuionsPanel"
+        style="margin: -20px 0px; height: auto; width: 500px"
       >
-        <h2>Prediction Panel</h2>
+        <h2 style="width: 100%; text-align: center">
+          A OverView of Prediction Model
+        </h2>
+
         <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-          "
+          class="container"
+          id="instructuionsPane"
+          style="margin: 0px; height: auto; width: 93%; padding: 15px"
         >
-          <div style="display: flex">
-            <h3 style="margin-right: 10px">Open Price:</h3>
-            <h4 id="openPrice" style="color: #0d6efd">$--</h4>
-          </div>
-          <div style="display: flex">
-            <h3 style="margin-right: 10px">Volume:</h3>
-            <h4 id="volume" style="color: #6c757d">--</h4>
-          </div>
+          <strong>Purpose:</strong> A deep learning model that accurately
+          predicts Tesla stock closing prices using real historical market data
+          (open, high, low, and volume).
         </div>
         <div
+          class="container"
+          id="instructuionsPane"
           style="
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            margin: 20px 0px 0px 0px;
+            height: auto;
+            width: 93%;
+            padding: 15px;
           "
         >
-          <div style="display: flex">
-            <h3 style="margin-right: 10px">High Price:</h3>
-            <h4 id="high" style="color: #198754">$--</h4>
-          </div>
-          <div style="display: flex">
-            <h3 style="margin-right: 10px">Low Price:</h3>
-            <h4 id="low" style="color: #dc3545">$--</h4>
-          </div>
+          <strong>Technology:</strong> Built using TensorFlow and Keras, with
+          feature scaling (StandardScaler) and volume normalization (log-scale)
+          to improve prediction accuracy.
         </div>
         <div
+          class="container"
+          id="instructuionsPane"
           style="
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
+            margin: 20px 0px 0px 0px;
+            height: auto;
+            width: 93%;
+            padding: 15px;
           "
         >
-          <div style="display: flex">
-            <h3 style="margin-right: 10px">Current Price:</h3>
-            <h4 id="currentPrice" style="color: #212529">$--</h4>
-          </div>
-          <div style="display: flex">
-            <h3 style="margin-right: 10px">Previous Close:</h3>
-            <h4 id="prevClose" style="color: #999">$--</h4>
-          </div>
+          <strong>Model Design:</strong> Utilizes a robust neural network
+          architecture (256–128–64 units) with ReLU activation and Mean Squared
+          Error (MSE) loss for training.
         </div>
-        <div style="display: flex; justify-content: center">
-          <div style="display: flex; align-items: center">
-            <h3 style="margin-right: 10px">Predicted Close:</h3>
-            <h4 id="predicted" style="color: #6f42c1">$--</h4>
+        <div
+          class="container"
+          id="instructuionsPane"
+          style="
+            margin: 20px 0px 0px 0px;
+            height: auto;
+            width: 93%;
+            padding: 15px;
+          "
+        >
+          <strong>Performance Ready:</strong> Trained on real stock data, tested
+          with tolerance-based accuracy (±2), and easy to integrate into any
+          dashboard, app, or trading tool.
+        </div>
+        <div style="display: flex; justify-content: end; gap: 10px">
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 80px;
+              height: 40px;
+              background-color: #343a40;
+              border-radius: 5px;
+              color: rgb(0, 0, 0);
+              margin: 20px 0px 0px 0px;
+              cursor: pointer;
+              background-color: #dcdcdc;
+            "
+            onclick="showMain()"
+          >
+            <h4 style="margin-right: 10px">Back</h4>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 140px;
+              height: 40px;
+              background-color: #343a40;
+              border-radius: 5px;
+              color: rgb(255, 255, 255);
+              margin: 20px 0px 0px 0px;
+              cursor: pointer;
+            "
+          >
+            <h4 style="margin-right: 10px">Learn more...</h4>
           </div>
         </div>
       </div>
 
-      <!-- Additional Info Panel -->
+      <div
+        class="container hidden"
+        id="mainForm"
+        style="margin: 30px 0px; height: auto"
+      >
+        <div id="open">
+          <h2>Prediction Panel</h2>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 20px;
+            "
+          >
+            <div style="display: flex">
+              <h3 style="margin-right: 10px">Open Price:</h3>
+              <h4 id="openPrice" style="color: #0d6efd">$--</h4>
+            </div>
+            <div style="display: flex">
+              <h3 style="margin-right: 10px">Volume:</h3>
+              <h4 id="volume" style="color: #6c757d">--</h4>
+            </div>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 20px;
+            "
+          >
+            <div style="display: flex">
+              <h3 style="margin-right: 10px">High Price:</h3>
+              <h4 id="high" style="color: #198754">$--</h4>
+            </div>
+            <div style="display: flex">
+              <h3 style="margin-right: 10px">Low Price:</h3>
+              <h4 id="low" style="color: #dc3545">$--</h4>
+            </div>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-top: 25px;
+            "
+          >
+            <div style="display: flex">
+              <h3 style="margin-right: 10px">Current Price:</h3>
+              <h4 id="currentPrice" style="color: #212529">$--</h4>
+            </div>
+            <div style="display: flex">
+              <h3 style="margin-right: 10px">Previous Close:</h3>
+              <h4 id="prevClose" style="color: #999">$--</h4>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: center">
+            <div style="display: flex; align-items: center">
+              <h3 style="margin-right: 10px">Predicted Close:</h3>
+              <h4 id="predicted" style="color: #6f42c1">$--</h4>
+            </div>
+          </div>
+        </div>
+        <div id="close" class="hidden" style="text-align: center">
+          <h1>Market is NOT Open</h1>
+          <h2>Please try again later</h2>
+          <h3>Time of Open: From 7:00pm IST to 1:30am IST</h3>
+        </div>
+      </div>
+
+      <div
+        class="container hidden"
+        id="support"
+        style="
+          width: 600px;
+          margin: 0px 0px;
+          background-color: #ffffff;
+          padding: 30px 40px;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          height: auto;
+        "
+      >
+        <div style="margin: 10px 0px">
+          <strong>Company Email:</strong> pixelpulseinnovation7@gmail.com
+        </div>
+        <div style="margin: 10px 0px">
+          <strong>Phone:</strong> +91 73809-735-- (Request full no. on mail)
+        </div>
+        <div style="margin: 10px 0px">
+          <strong>Developer Email:</strong> uzi.v12025@gmail.com
+        </div>
+        <div style="margin: 10px 0px">
+          <strong>Discord username:</strong> uzi03523
+        </div>
+        <div style="display: flex; justify-content: end; gap: 10px">
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 80px;
+              height: 40px;
+              background-color: #343a40;
+              border-radius: 5px;
+              color: rgb(0, 0, 0);
+              margin: 20px 0px 0px 0px;
+              cursor: pointer;
+              background-color: #dcdcdc;
+            "
+            onclick="showMain()"
+          >
+            <h4 style="margin-right: 10px">Back</h4>
+          </div>
+        </div>
+      </div>
       <div
         class="container hidden"
         id="additionalPanel"
@@ -190,11 +394,31 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
           "
         ></ul>
         <h2 style="color: #2c7a3f">OUR model's accuracy is ALLWAYS 90+</h2>
+        <div style="display: flex; justify-content: end; gap: 10px">
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 80px;
+              height: 40px;
+              background-color: #343a40;
+              border-radius: 5px;
+              color: rgb(0, 0, 0);
+              margin: 20px 0px 0px 0px;
+              cursor: pointer;
+              background-color: #dcdcdc;
+            "
+            onclick="showMain()"
+          >
+            <h4 style="margin-right: 10px">Back</h4>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -205,6 +429,43 @@
       const correctPassword = "theFuturixISgreat99696";
       const FINNHUB_API_KEY = "d10ntvpr01qlsaca9d20d10ntvpr01qlsaca9d2g";
 
+      const list = document.querySelector("#additionalPanel ul");
+      const mainForm = document.getElementById("mainForm");
+      const openPanel = document.getElementById("open");
+      const closePanel = document.getElementById("close");
+      const about = document.getElementById("about");
+      const additionalPanel = document.getElementById("additionalPanel");
+      const instructuionsPane = document.getElementById("instructuionsPanel");
+      const support = document.getElementById("support");
+
+      const showAbout = () => {
+        mainForm.classList.add("hidden");
+        instructuionsPane.classList.remove("hidden");
+        additionalPanel.classList.add("hidden");
+        support.classList.add("hidden");
+      };
+
+      const showPerformance = () => {
+        mainForm.classList.add("hidden");
+        instructuionsPane.classList.add("hidden");
+        additionalPanel.classList.remove("hidden");
+        support.classList.add("hidden");
+      };
+
+      const showMain = () => {
+        mainForm.classList.remove("hidden");
+        instructuionsPane.classList.add("hidden");
+        additionalPanel.classList.add("hidden");
+        support.classList.add("hidden");
+      };
+
+      const showSupport = () => {
+        mainForm.classList.add("hidden");
+        instructuionsPane.classList.add("hidden");
+        additionalPanel.classList.add("hidden");
+        support.classList.remove("hidden");
+      };
+
       function checkPassword() {
         const input = document.getElementById("passwordInput").value;
         const errorMsg = document.getElementById("errorMsg");
@@ -212,10 +473,8 @@
         if (input === correctPassword) {
           document.getElementById("passwordSection").classList.add("hidden");
           document.getElementById("panelsWrapper").classList.remove("hidden");
-          document.getElementById("additionalPanel").classList.remove("hidden");
-          document.getElementById("mainForm").classList.remove("hidden");
-          fetchStockData();
-          setInterval(fetchStockData, 10000);
+          mainForm.classList.remove("hidden");
+          about.classList.remove("hidden");
         } else {
           errorMsg.textContent = "Incorrect password. Please try again.";
         }
@@ -223,7 +482,7 @@
 
       // Function to fetch and display historical stock data
       async function fetchHistoricalData() {
-        const ALPHA_VANTAGE_API_KEY = "P93MC8OGQWD8KCU1";
+        const ALPHA_VANTAGE_API_KEY = "5SAMEHU53TMKCY5V";
         const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=${ALPHA_VANTAGE_API_KEY}`;
 
         try {
@@ -279,7 +538,6 @@
             });
 
           // Update model performance panel (last 6 days)
-          const list = document.querySelector("#additionalPanel ul");
           list.innerHTML = ""; // Clear old data
 
           dates.forEach((date) => {
@@ -307,7 +565,7 @@
                 ).toFixed(1);
 
                 list.innerHTML += `
-                  <li style="background-color: #f1f7ff; border-left: 4px solid #4e9af1; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+                  <li style="background-color: #f1f7ff; border-left: 4px solid #343a40; padding: 8px 20px; margin: 8px 20px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;">
                     <span><strong>Date:</strong> ${date}</span>
                     <span><strong>Predicted Close:</strong> $${predictedClose}</span>
                     <span><strong>Actual Close:</strong> $${actualClose}</span>
@@ -318,11 +576,58 @@
           });
         } catch (error) {
           console.error("Error fetching Alpha Vantage data", error);
-          alert("Failed to fetch data from Alpha Vantage.");
+          list.innerHTML += `
+                  <li style="background-color: #f1f7ff; border-left: 4px solid #343a40; padding: 8px 20px; margin: 8px 20px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;">
+                    Data we will be available soon, please try again later.
+                  </li>`;
         }
       }
 
       fetchHistoricalData();
+
+      function getMarketStatusIST() {
+        const now = new Date();
+
+        // Convert to IST
+        const istOffset = 5.5 * 60; // IST is UTC +5:30
+        const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+        const ist = new Date(utc + istOffset * 60000);
+
+        const hours = ist.getHours();
+        const minutes = ist.getMinutes();
+
+        // Convert current time to minutes since midnight
+        const currentMinutes = hours * 60 + minutes;
+
+        // Market hours in IST
+        const marketOpen = 19 * 60; // 7:00 PM IST => 1140 minutes
+        const marketClose = 1 * 60 + 30; // 1:30 AM IST => 90 minutes (next day)
+
+        let marketStatus = "";
+
+        // If currentMinutes is between 0:00 and 1:30 AM
+        if (currentMinutes <= marketClose || currentMinutes >= marketOpen) {
+          marketStatus = "Market Open";
+          fetchStockData();
+          setInterval(fetchStockData, 10000);
+          openPanel.classList.remove("hidden");
+          closePanel.classList.add("hidden");
+        } else {
+          marketStatus = "Market Closed";
+          openPanel.classList.add("hidden");
+          closePanel.classList.remove("hidden");
+        }
+
+        return {
+          istTime: ist.toLocaleTimeString(),
+          status: marketStatus,
+        };
+      }
+
+      // Usage
+      const status = getMarketStatusIST();
+      console.log("Current IST Time:", status.istTime);
+      console.log("Market Status:", status.status);
 
       function fetchStockData() {
         const url = `https://finnhub.io/api/v1/quote?symbol=TSLA&token=${FINNHUB_API_KEY}`;
