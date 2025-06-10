@@ -394,6 +394,7 @@
           Here is a view of how our model performed a few days ago:
         </p>
         <ul
+          id="predictionList"
           style="
             list-style: none;
             padding: 0;
@@ -433,7 +434,7 @@
       const correctPassword = "theFuturixISgreat99696";
       const FINNHUB_API_KEY = "d10ntvpr01qlsaca9d20d10ntvpr01qlsaca9d2g";
 
-      const list = document.querySelector("#additionalPanel ul");
+      const list = document.getElementById("predictionList");
       const mainForm = document.getElementById("mainForm");
       const openPanel = document.getElementById("open");
       const closePanel = document.getElementById("close");
@@ -479,12 +480,35 @@
           document.getElementById("panelsWrapper").classList.remove("hidden");
           mainForm.classList.remove("hidden");
           about.classList.remove("hidden");
+          loadFromLocalStorage();
         } else {
           errorMsg.textContent = "Incorrect password. Please try again.";
         }
       }
 
-      // Function to fetch and display historical stock data
+      const setValues = ({
+        date,
+        predictedClose,
+        actualClose,
+        diff,
+        accuracy,
+      }) => {
+        list.innerHTML += `
+    <li style="background-color: #f1f7ff; border-left: 4px solid #343a40; padding: 8px 20px; margin: 8px 20px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;">
+      <span><strong>Date:</strong> ${date}</span>
+      <span><strong>Predicted Close:</strong> $${predictedClose}</span>
+      <span><strong>Actual Close:</strong> $${actualClose}</span>
+      <span style="color: red;"><strong>Difference:</strong> $${diff}</span>
+      <span style="color: #2c7a3f; font-weight: bold"><strong>Accuracy:</strong> ${accuracy}%</span>
+    </li>`;
+      };
+
+      function loadFromLocalStorage() {
+        const stored = JSON.parse(localStorage.getItem("predictionData")) || [];
+        list.innerHTML = ""; // Clear previous list
+        stored.forEach(setValues);
+      }
+
       async function fetchHistoricalData() {
         const ALPHA_VANTAGE_API_KEY = "5SAMEHU53TMKCY5V";
         const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=TSLA&apikey=${ALPHA_VANTAGE_API_KEY}`;
@@ -522,7 +546,7 @@
             dailyData[dates[1]]["4. close"]
           ).toFixed(2)}`;
 
-          // Send to your prediction backend
+          // Predict today's closing price
           fetch("https://web-production-9ac0.up.railway.app/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -541,15 +565,17 @@
               showRefreshPopup();
             });
 
-          // Update model performance panel (last 6 days)
-          list.innerHTML = ""; // Clear old data
+          // Clear old localStorage data and HTML list
+          localStorage.removeItem("predictionData");
+          list.innerHTML = "";
+          const predictionData = [];
 
-          dates.forEach((date) => {
+          // Loop through each of the last 6 days
+          for (const date of dates) {
             const entry = dailyData[date];
             const actualClose = parseFloat(entry["4. close"]).toFixed(2);
 
-            // Optionally send to /predict to get predicted for each day
-            fetch("https://web-production-9ac0.up.railway.app/predict", {
+            await fetch("https://web-production-9ac0.up.railway.app/predict", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -568,26 +594,58 @@
                   (Math.abs(diff) / actualClose) * 100
                 ).toFixed(1);
 
-                list.innerHTML += `
-                  <li style="background-color: #f1f7ff; border-left: 4px solid #343a40; padding: 8px 20px; margin: 8px 20px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;">
-                    <span><strong>Date:</strong> ${date}</span>
-                    <span><strong>Predicted Close:</strong> $${predictedClose}</span>
-                    <span><strong>Actual Close:</strong> $${actualClose}</span>
-                    <span style="color: red;"><strong>Difference:</strong> $${diff}</span>
-                    <span style="color: #2c7a3f; font-weight: bold"><strong>Accuracy:</strong> ${accuracy}%</span>
-                  </li>`;
+                const item = {
+                  date,
+                  predictedClose,
+                  actualClose,
+                  diff,
+                  accuracy,
+                };
+
+                // Add to memory list
+                predictionData.push(item);
+
+                // Display
+                setValues(item);
               });
-          });
+          }
+
+          // Save all predictions to localStorage
+          localStorage.setItem(
+            "predictionData",
+            JSON.stringify(predictionData)
+          );
         } catch (error) {
           console.error("Error fetching Alpha Vantage data", error);
           list.innerHTML += `
-                  <li style="background-color: #f1f7ff; border-left: 4px solid #343a40; padding: 8px 20px; margin: 8px 20px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;">
-                    Data we will be available soon, please try again later.
-                  </li>`;
+      <li style="background-color: #f1f7ff; border-left: 4px solid #343a40; padding: 8px 20px; margin: 8px 20px; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;">
+        Data will be available soon, please try again later.
+      </li>`;
         }
       }
 
-      fetchHistoricalData();
+      function isToday(dateString) {
+        const today = new Date();
+        const date = new Date(dateString);
+        return (
+          today.getFullYear() === date.getFullYear() &&
+          today.getMonth() === date.getMonth() &&
+          today.getDate() === date.getDate()
+        );
+      }
+
+      async function fetchHistoricalDataOncePerDay() {
+        const lastFetchDate = localStorage.getItem("lastFetchDate");
+
+        if (!lastFetchDate || !isToday(lastFetchDate)) {
+          await fetchHistoricalData(); // Your existing function
+          localStorage.setItem("lastFetchDate", new Date().toISOString());
+        } else {
+          console.log("Already fetched today");
+        }
+      }
+
+      fetchHistoricalDataOncePerDay();
 
       function getMarketStatusIST() {
         const now = new Date();
