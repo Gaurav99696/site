@@ -695,7 +695,7 @@
         const url = `https://finnhub.io/api/v1/quote?symbol=TSLA&token=${FINNHUB_API_KEY}`;
 
         fetch(url)
-          .then((res) => res.json())
+          .then((res) => res.json(), console.log(res))
           .then((data) => {
             const open = parseFloat(data.o).toFixed(2);
             const high = parseFloat(data.h).toFixed(2);
